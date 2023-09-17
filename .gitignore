@@ -1,0 +1,12 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore .env files (containing environment variables)
+.env
+
+# Ignore log files
+*.log
+
+# Ignore any build or output directories (customize this based on your project structure)
+dist/
+build/
