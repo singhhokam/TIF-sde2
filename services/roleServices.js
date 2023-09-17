@@ -8,7 +8,7 @@ async function createUserRole(data) {
   if (valid) {
     const id = Snowflake.generate({ timestamp: Date.now() });
     const role = await Role.create({ id: id, name: name });
-    return { data: role, meta: {} };
+    return { data: role };
   }
 }
 

@@ -69,6 +69,9 @@ async function loginUser(email, password) {
 }
 
 async function getUser(token) {
+  if (!token) {
+    throw { message: "You need to sign in to proceed.", code: "NOT_SIGNEDIN" };
+  }
   const validToken = verify(token, process.env.SECRET, {
     algorithms: ["HS256"],
   });
@@ -84,4 +87,5 @@ async function getUser(token) {
 module.exports = {
   createUser,
   loginUser,
+  getUser,
 };

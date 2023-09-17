@@ -1,7 +1,11 @@
 const Joi = require("joi");
 
 const roleSchema = Joi.object({
-  name: Joi.string().required().length(2),
+  name: Joi.string().required().min(2).messages({
+    "string.base": "name must be a string",
+    "any.required": "name can not be empty",
+    "string.min": "name must be at least 2 characters long",
+  }),
 });
 
 const userSchema = Joi.object({
@@ -26,16 +30,11 @@ const userSchema = Joi.object({
 function validateSchema(schema, model) {
   const { error, value } = schema.validate(model);
   if (error) {
-    console.error("Validation error:", error.details);
-    let errors = [];
-    error.details.map((err) => {
-      errors.push({
-        code: "INVALID_INPUT",
-        param: err.context.key,
-        message: err.message,
-      });
-    });
-    throw errors;
+    throw {
+      code: "INVALID_INPUT",
+      param: error.details[0].context.key,
+      message: error.details[0].message,
+    };
   } else {
     console.log("Validation successful:", value);
     return value;
@@ -59,11 +58,11 @@ function validateEmail(email) {
 }
 
 function validateCommunityName(name) {
-  const name = Joi.string().required().min(2).messages({
+  const nameSchema = Joi.string().required().min(2).messages({
     "string.min": "Name should be at least 2 characters.",
     "any.required": "Name can not be empty.",
   });
-  const { error, value } = emailSchema.validate(name);
+  const { error, value } = nameSchema.validate(name);
   if (error) {
     console.error("Email validation error:", error.details[0].message);
     throw {

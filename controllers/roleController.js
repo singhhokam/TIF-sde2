@@ -1,4 +1,4 @@
-const { createUserRole } = require("../services/roleServices");
+const { createUserRole, getAllRoles } = require("../services/roleServices");
 
 async function createRole(req, res, next) {
   try {
@@ -8,6 +8,22 @@ async function createRole(req, res, next) {
       content: data,
     });
   } catch (error) {
-    next(error);
+    next({ status: 400, errors: error });
   }
 }
+
+async function fetchAllRoles(req, res, next) {
+  try {
+    const data = await getAllRoles();
+    res.status(200).json({
+      status: true,
+      content: data,
+    });
+  } catch (error) {
+    next({ status: 400, errors: error });
+  }
+}
+
+module.exports = {
+  createRole,
+};
