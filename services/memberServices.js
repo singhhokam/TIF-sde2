@@ -59,11 +59,32 @@ async function addMemberToCommunity(communityId, userId, memberId, roleId) {
 }
 
 async function removeMemberFromCommunity(userId, memberId) {
-  const community = await Community.findOne({
+  let community = await Community.findOne({
     where: {
       userId: userId,
     },
   });
+  if (!community) {
+    const moderator = await Member.findOne({
+      where: { id: userId },
+      include: [
+        {
+          model: Role,
+          where: {
+            name: {
+              [Op.or]: ["Community Admin", "Community Moderator"],
+            },
+          },
+          required: false,
+        },
+        {
+          model: Community,
+          attributes: ["id"],
+        },
+      ],
+    });
+    community = moderator.community;
+  }
   const member = await Member.findOne({
     where: { id: memberId, communityId: community.id },
   });
