@@ -24,7 +24,6 @@ try {
   console.error(error);
 }
 
-app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/v1/role", roleRouter);
 app.use("/v1/auth", authRouter);
 app.use("/v1/community", communityRouter);

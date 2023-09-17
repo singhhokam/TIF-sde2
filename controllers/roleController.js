@@ -26,4 +26,5 @@ async function fetchAllRoles(req, res, next) {
 
 module.exports = {
   createRole,
+  fetchAllRoles,
 };

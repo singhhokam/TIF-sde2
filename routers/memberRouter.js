@@ -1,7 +1,11 @@
 const express = require("express");
+const {
+  newCommunityMember,
+  deleteMember,
+} = require("../controllers/memberController");
 const memberRouter = express.Router();
 
-memberRouter.post("/", addMember);
-memberRouter.delete("/member/:id", removeMember);
+memberRouter.post("/", newCommunityMember);
+memberRouter.delete("/member/:id", deleteMember);
 
 module.exports = memberRouter;
