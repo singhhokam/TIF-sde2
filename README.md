@@ -22,7 +22,12 @@ Each user, can create a community and (automatically) gets assigned the Communit
    - Feature: User should be able to add a user as member.
    - Feature: User should be able to remove a member from community.
 
-**Tech Stack** - Language: Node v14+ - Database: Postgres / MySQL / MongoDB - ORM: Sequelize / Prisma / Mongoose / MongoDB Native Driver - Library: @theinternetfolks/snowflake to generate unique IDs instead of autoincrement, UUID or MongoDB ObjectID
+**Tech Stack**
+
+- Language: Node v14+
+- Database: Postgres / MySQL / MongoDB
+- ORM: Sequelize / Prisma / Mongoose / MongoDB Native Driver
+- Library: @theinternetfolks/snowflake to generate unique IDs instead of autoincrement, UUID or MongoDB ObjectID
 
 **Models**
 
