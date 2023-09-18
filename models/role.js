@@ -11,6 +11,7 @@ const Role = database.define(
     },
     name: {
       type: DataTypes.STRING(64),
+      unique: true,
       allowNull: false,
     },
     scopes: {

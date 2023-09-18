@@ -36,42 +36,45 @@ function validateSchema(schema, model) {
       message: error.details[0].message,
     };
   } else {
-    console.log("Validation successful:", value);
     return value;
   }
 }
 
 function validateEmail(email) {
-  const emailSchema = Joi.string().email().required();
-  const { error, value } = emailSchema.validate(email);
+  const emailSchema = Joi.object({
+    email: Joi.string().email().required().messages({
+      "string.base": "email must be a string",
+      "any.required": "email can not be empty",
+      "string.email": "must be a valid email",
+    }),
+  });
+  const { error, value } = emailSchema.validate({ email });
   if (error) {
-    console.error("Email validation error:", error.details[0].message);
     throw {
       code: "INVALID_INPUT",
-      param: error.context.key,
+      param: error.details[0].context.key || error.details[0].context.label,
       message: error.details[0].message,
     };
   } else {
-    console.log("Valid email:", value);
     return value;
   }
 }
 
 function validateCommunityName(name) {
-  const nameSchema = Joi.string().required().min(2).messages({
-    "string.min": "Name should be at least 2 characters.",
-    "any.required": "Name can not be empty.",
+  const nameSchema = Joi.object({
+    name: Joi.string().required().min(2).messages({
+      "string.min": "Name should be at least 2 characters.",
+      "any.required": "Name can not be empty.",
+    }),
   });
-  const { error, value } = nameSchema.validate(name);
+  const { error, value } = nameSchema.validate({ name });
   if (error) {
-    console.error("Email validation error:", error.details[0].message);
     throw {
       code: "INVALID_INPUT",
-      param: error.context.key,
+      param: error.details[0].context?.key || error.details[0].context?.label,
       message: error.details[0].message,
     };
   } else {
-    console.log("Valid email:", value);
     return value;
   }
 }

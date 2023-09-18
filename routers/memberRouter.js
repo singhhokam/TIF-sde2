@@ -6,6 +6,6 @@ const {
 const memberRouter = express.Router();
 
 memberRouter.post("/", newCommunityMember);
-memberRouter.delete("/member/:id", deleteMember);
+memberRouter.delete("/:id", deleteMember);
 
 module.exports = memberRouter;

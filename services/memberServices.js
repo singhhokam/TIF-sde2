@@ -1,7 +1,9 @@
+const { Snowflake } = require("@theinternetfolks/snowflake");
 const Community = require("../models/community");
 const Member = require("../models/member");
 const Role = require("../models/role");
 const User = require("../models/user");
+const { Op } = require("sequelize");
 
 async function addMemberToCommunity(communityId, userId, memberId, roleId) {
   const community = await Community.findByPk(communityId, {
@@ -19,7 +21,24 @@ async function addMemberToCommunity(communityId, userId, memberId, roleId) {
       code: "RESOURCE_NOT_FOUND",
     };
   }
-  if (community.owner.id !== userId) {
+  const isModerator = await Member.findOne({
+    //    attributes: [],
+    where: {
+      [Op.and]: {
+        communityId: communityId,
+        userId: userId,
+      },
+    },
+    include: [
+      {
+        model: Role,
+        as: "role",
+        where: { name: "Community Moderator" },
+        attributes: ["id"],
+      },
+    ],
+  });
+  if (community.owner.id !== userId && !isModerator) {
     throw {
       message: "You are not authorized to perform this action.",
       code: "NOT_ALLOWED_ACCESS",
@@ -50,10 +69,19 @@ async function addMemberToCommunity(communityId, userId, memberId, roleId) {
       code: "RESOURCE_NOT_FOUND",
     };
   }
-  const member = await Member.create({
+  const { id } = await Member.create({
+    id: Snowflake.generate({ timestamp: Date.now() }),
     communityId: communityId,
     userId: memberId,
     roleId: roleId,
+  });
+  const member = await Member.findByPk(id, {
+    attributes: [
+      ["communityId", "community"],
+      ["userId", "user"],
+      ["roleId", "role"],
+      "created_at",
+    ],
   });
   return { data: member };
 }

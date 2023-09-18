@@ -7,27 +7,30 @@ const authRouter = require("./routers/authRouter");
 const communityRouter = require("./routers/communityRouter");
 const memberRouter = require("./routers/memberRouter");
 const errorHandler = require("./middlewares/errorHandler");
+const { authMiddleware } = require("./middlewares/authMiddleware");
 require("dotenv").config();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.disable("X-Powered-By");
 
 try {
   database.authenticate();
   console.log("connected to database ", database.getDatabaseName());
-  // associate();
+  associate();
   database.sync();
 } catch (error) {
   console.error(error);
 }
 
-app.use("/v1/role", roleRouter);
+app.use("/v1/role", authMiddleware, roleRouter);
 app.use("/v1/auth", authRouter);
-app.use("/v1/community", communityRouter);
-app.use("/v1/member", memberRouter);
+app.use("/v1/community", authMiddleware, communityRouter);
+app.use("/v1/member", authMiddleware, memberRouter);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`SaaS app listening on port ${port}!`));

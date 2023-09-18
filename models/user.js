@@ -23,11 +23,7 @@ const User = database.define(
     },
     password: {
       type: DataTypes.STRING(64),
-      validate: {
-        is: [
-          "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@#$%^&+=!*_])[A-Za-zd@#$%^&+=!*_]{8,}$",
-        ],
-      },
+      allowNull: false,
     },
   },
   {

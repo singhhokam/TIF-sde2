@@ -16,6 +16,7 @@ const Community = database.define(
     },
     slug: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
   },

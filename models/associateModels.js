@@ -5,7 +5,7 @@ const User = require("./user");
 
 function associate() {
   User.hasMany(Community, { foreignKey: "userId", as: "owner" });
-  Community.belongsTo(User);
+  Community.belongsTo(User, { foreignKey: "userId", as: "owner" });
 
   Community.hasMany(Member, { foreignKey: "communityId", as: "members" });
   Member.belongsTo(Community);

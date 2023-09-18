@@ -12,6 +12,13 @@ const { sign, verify } = require("jsonwebtoken");
 async function createUser(data) {
   const valid = validateSchema(userSchema, data);
   if (valid) {
+    const userExists = await User.findOne({ where: { email: data.email } });
+    if (userExists) {
+      throw {
+        message: "Account with this email already exists.",
+        code: "RESOURCE_EXISTS",
+      };
+    }
     const id = Snowflake.generate({ timestamp: Date.now() });
     data.password = createHash("sha256").update(data.password).digest("hex");
     const user = await User.create({ id: id, ...data });
@@ -43,7 +50,7 @@ async function loginUser(email, password) {
       };
     }
     const hashPassword = createHash("sha256").update(password).digest("hex");
-    if (!user.password == hashPassword) {
+    if (user.password !== hashPassword) {
       throw {
         param: "password",
         message: "The credentials you provided are invalid.",

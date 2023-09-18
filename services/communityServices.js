@@ -1,3 +1,4 @@
+const { Snowflake } = require("@theinternetfolks/snowflake");
 const Community = require("../models/community");
 const Member = require("../models/member");
 const Role = require("../models/role");
@@ -8,17 +9,27 @@ async function createCommunity(name, userId) {
   const valid = validateCommunityName(name);
   if (valid) {
     const communityObj = {
+      id: Snowflake.generate({ timestamp: Date.now() }),
       name: name,
       slug: name.split(" ").join("-"),
       userId: userId,
     };
+    const communityExists = await Community.findOne({ where: { name: name } });
+    if (communityExists) {
+      throw {
+        message: "community already exists.",
+        code: "RESOURCE_EXISTS",
+      };
+    }
     const community = await Community.create(communityObj);
     const role = await Role.create({
+      id: Snowflake.generate({ timestamp: Date.now() }),
       name: "Community Admin",
       scopes: "admin",
     });
     const member = await Member.create({
-      communityId: community.isSoftDeleted,
+      id: Snowflake.generate({ timestamp: Date.now() }),
+      communityId: community.id,
       userId: userId,
       roleId: role.id,
     });
@@ -30,55 +41,69 @@ async function getAllCommunities() {
   const communities = await Community.findAll({
     include: [
       {
+        as: "owner",
         model: User,
         attributes: ["id", "name"],
-        as: "owner",
       },
     ],
+    attributes: {
+      exclude: ["userId"],
+    },
   });
   return {
-    data: communities,
     meta: {
       total: communities.length,
-      pages: communities.length / 10,
-      page: communities.length / 10,
+      pages: Math.ceil(communities.length / 10),
+      page: Math.ceil(communities.length / 10),
     },
+    data: communities,
   };
 }
 
 async function getAllMembersByCommunity(id) {
   const members = await Member.findAll({
     where: { communityId: id },
+    attributes: {
+      exclude: ["userId", "roleId"],
+    },
     include: [
       {
         model: User,
+        as: "user",
         attributes: ["id", "name"],
       },
       {
         model: Role,
+        as: "role",
         attributes: ["id", "name"],
       },
     ],
   });
   return {
-    data: members,
     meta: {
       total: members.length,
-      pages: members.length / 10,
-      page: members.length / 10,
+      pages: Math.ceil(members.length / 10),
+      page: Math.ceil(members.length / 10),
     },
+    data: members,
   };
 }
 
 async function getMyOwnedCommunity(userId) {
-  const communities = await Community.findAll({ where: { userId: userId } });
+  const communities = await Community.findAll({
+    attributes: {
+      include: [["userId", "owner"]],
+      exclude: ["userId"],
+    },
+    where: { userId: userId },
+  });
   return {
-    data: communities,
     meta: {
       total: communities.length,
-      pages: communities.length / 10,
-      page: communities.length / 10,
+      pages: Math.ceil(communities.length / 10),
+      page: Math.ceil(communities.length / 10),
     },
+    data: communities,
   };
 }
 
@@ -92,6 +117,7 @@ async function getMyJoinedCommunity(userId) {
           userId: userId,
         },
         required: false,
+        attributes: [],
       },
       {
         model: User,
@@ -99,14 +125,17 @@ async function getMyJoinedCommunity(userId) {
         attributes: ["id", "name"],
       },
     ],
+    attributes: {
+      exclude: ["userId"],
+    },
   });
   return {
-    data: communities,
     meta: {
       total: communities.length,
-      pages: communities.length / 10,
-      page: communities.length / 10,
+      pages: Math.ceil(communities.length / 10),
+      page: Math.ceil(communities.length / 10),
     },
+    data: communities,
   };
 }
 
