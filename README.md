@@ -32,6 +32,7 @@ Each user, can create a community and (automatically) gets assigned the Communit
    ```
 
 3. Set env variables as following
+
    DATABASE = "database name"
    USER = "database username"
    PASSWORD="database password"
