@@ -32,6 +32,7 @@ Each user, can create a community and (automatically) gets assigned the Communit
 **Models**
 
 **Architecture**
+
 ![Database Schema](https://i.postimg.cc/yYxqP7P7/Hiring-Assignment.png)
 
 **User (user)**
