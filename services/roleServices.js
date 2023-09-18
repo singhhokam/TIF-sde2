@@ -22,7 +22,7 @@ async function getAllRoles(page = 1, perPage = 10) {
     offset: (page - 1) * perPage,
   });
   const roleCount = await Role.count();
-  const pages = roleCount / 10;
+  const pages = Math.ceil(roleCount / 10);
   return { meta: { total: roleCount, pages: pages, page: pages }, data: roles };
 }
 

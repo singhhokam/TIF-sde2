@@ -114,7 +114,7 @@ async function removeMemberFromCommunity(userId, memberId) {
     community = moderator.community;
   }
   const member = await Member.findOne({
-    where: { id: memberId, communityId: community.id },
+    where: { userId: memberId, communityId: community.id },
   });
   if (!member) {
     throw {
