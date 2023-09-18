@@ -5,6 +5,7 @@
 SaaS project that enables user to make their communities and add members to it.
 
 **About**
+
 You run a SaaS Platform that enables user to make their communities and add members to it.
 
 Each user, can create a community and (automatically) gets assigned the Community Admin role. They can add other users to the community who get assigned the Community Member role.
@@ -61,8 +62,8 @@ Each user, can create a community and (automatically) gets assigned the Communit
 **Tech Stack**
 
 - Language: Node v14+
-- Database: Postgres / MySQL / MongoDB
-- ORM: Sequelize / Prisma / Mongoose / MongoDB Native Driver
+- Database: MySQL
+- ORM: Sequelize
 - Library: @theinternetfolks/snowflake to generate unique IDs instead of autoincrement, UUID or MongoDB ObjectID
 
 **Models**
