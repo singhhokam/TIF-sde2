@@ -17,6 +17,7 @@ const Role = database.define(
     scopes: {
       type: DataTypes.STRING,
       allowNull: false,
+      comment: "MySQL does not support array datatypes",
     },
   },
   {
