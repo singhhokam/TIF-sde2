@@ -9,6 +9,41 @@ You run a SaaS Platform that enables user to make their communities and add memb
 
 Each user, can create a community and (automatically) gets assigned the Community Admin role. They can add other users to the community who get assigned the Community Member role.
 
+### Prerequisites
+
+- Node.js installed (at least version 14)
+- npm or yarn installed
+- MySQL installed and running
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/singhhokam/TIF-sde2.git
+
+   ```
+
+2. cd TIF-sde2
+
+   ```bash
+   npm install
+
+   ```
+
+3. Set env variables as following
+   DATABASE = "database name"
+   USER = "database username"
+   PASSWORD="database password"
+   PORT = 8080
+   SECRET = "your jwt secret"
+   NODE_ENV = "development"
+
+4. Start the project
+   ```bash
+   npm start
+   ```
+
 **User Stories (Features)**
 
 1. Module: Authentication
