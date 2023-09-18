@@ -10,7 +10,7 @@ async function createUserRole(data) {
     const role = await Role.create({
       id: id,
       name: name,
-      scopes: data.scopes || "user",
+      scopes: data.scopes ?? "user",
     }); // MySQL does not support array data type so I have used a string here instead
     return { data: role };
   }

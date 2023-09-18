@@ -14,11 +14,6 @@ const Role = database.define(
       unique: true,
       allowNull: false,
     },
-    scopes: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      comment: "MySQL does not support array datatypes",
-    },
   },
   {
     createdAt: "created_at",

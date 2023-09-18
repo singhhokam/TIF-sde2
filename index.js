@@ -33,4 +33,10 @@ app.use("/v1/community", authMiddleware, communityRouter);
 app.use("/v1/member", authMiddleware, memberRouter);
 app.use(errorHandler);
 
-app.listen(port, () => console.log(`SaaS app listening on port ${port}!`));
+app.listen(port, () =>
+  console.log(
+    `SaaS app listening on port ${port}!\n http://localhost:${
+      process.env.PORT || port
+    }`
+  )
+);

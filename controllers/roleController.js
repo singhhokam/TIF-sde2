@@ -8,7 +8,6 @@ async function createRole(req, res, next) {
       content: data,
     });
   } catch (error) {
-    console.log(error);
     next({ status: 400, errors: [error] });
   }
 }
