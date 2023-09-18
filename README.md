@@ -35,8 +35,70 @@ Each user, can create a community and (automatically) gets assigned the Communit
 
 ![Database Schema](https://i.postimg.cc/yYxqP7P7/Hiring-Assignment.png)
 
-**User (user)**
+# Database Schema
 
-| key  | kind   | Notes   |
-| ---- | ------ | ------- |
-| test | helooo | no no n |
+## User (user)
+
+| Key        | Kind               | Notes         |
+| ---------- | ------------------ | ------------- |
+| id         | string (snowflake) | primary key   |
+| name       | varchar(64)        | default: null |
+| email      | varchar(128)       | unique        |
+| password   | varchar(64)        | -             |
+| created_at | datetime           | -             |
+
+## Community (community)
+
+| Key        | Kind               | Notes                             |
+| ---------- | ------------------ | --------------------------------- |
+| id         | string (snowflake) | primary key                       |
+| name       | varchar(128)       | -                                 |
+| slug       | varchar(255)       | unique                            |
+| owner      | string (snowflake) | ref: > user.id, relationship: m2o |
+| created_at | datetime           | -                                 |
+| updated_at | datetime           | -                                 |
+
+## Role (role)
+
+| Key        | Kind               | Notes       |
+| ---------- | ------------------ | ----------- |
+| id         | string (snowflake) | primary key |
+| name       | varchar(64)        | unique      |
+| created_at | datetime           | -           |
+| updated_at | datetime           | -           |
+
+## Member (member)
+
+| Key        | Kind               | Notes               |
+| ---------- | ------------------ | ------------------- |
+| id         | string (snowflake) | primary key         |
+| community  | string (snowflake) | ref: > community.id |
+| user       | string (snowflake) | ref: > user.id      |
+| role       | string (snowflake) | ref: > role.id      |
+| created_at | datetime           | -                   |
+
+# API Endpoints
+
+## Role
+
+- Create: `POST /v1/role`
+- Get All: `GET /v1/role`
+
+## User
+
+- Sign Up: `POST /v1/auth/signup`
+- Sign In: `POST /v1/auth/signin`
+- Get Me: `GET /v1/auth/me`
+
+## Community
+
+- Create: `POST /v1/community`
+- Get All: `GET /v1/community`
+- Get All Members: `GET /v1/community/:id/members`
+- Get My Owned Community: `GET /v1/community/me/owner`
+- Get My Joined Community: `GET /v1/community/me/member`
+
+## Member
+
+- Add Member: `POST /v1/member`
+- Remove Member: `DELETE /v1/member/:id`
