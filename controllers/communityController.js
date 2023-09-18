@@ -16,6 +16,7 @@ async function newCommunity(req, res, next) {
     const data = await createCommunity(req.body.name, id);
     res.status(201).json({ status: true, content: data });
   } catch (error) {
+    console.log(error);
     next({ status: 400, errors: [error] });
   }
 }

@@ -22,11 +22,19 @@ async function createCommunity(name, userId) {
       };
     }
     const community = await Community.create(communityObj);
-    const role = await Role.create({
-      id: Snowflake.generate({ timestamp: Date.now() }),
-      name: "Community Admin",
-      scopes: "admin",
-    });
+    /* Role is not dependent on any other model so we can use single "Community Admin" , 
+    "Community Moderator" or "Community User" for any member we create, it can be fixed. 
+    In the documentaion it is stated that Roles(name) must be unique, if so then what other roles there might be 
+    assigned to members, it is not clearly stated in docs so I am not creating new and using existing one.
+    */
+    const role = await Role.findOrCreate(
+      { where: { name: "Community Admin" } },
+      {
+        id: Snowflake.generate({ timestamp: Date.now() }),
+        name: "Community Admin",
+        scopes: "admin",
+      }
+    );
     const member = await Member.create({
       id: Snowflake.generate({ timestamp: Date.now() }),
       communityId: community.id,
